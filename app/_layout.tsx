@@ -1,19 +1,39 @@
 "use client"
 
-import { DefaultTheme, ThemeProvider } from "@react-navigation/native"
+import type React from "react"
+
+import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native"
 import { useFonts } from "expo-font"
 import { Stack } from "expo-router"
 import { StatusBar } from "expo-status-bar"
-import React from "react"
-import { ActivityIndicator, View } from "react-native"
+import { View, ActivityIndicator } from "react-native"
+import { useEffect } from "react"
+import { useRouter, useSegments } from "expo-router"
 import "react-native-reanimated"
 
+import { useColorScheme } from "@/hooks/useColorScheme"
 import { AuthProvider, useAuth } from "../context/AuthContext"
 
-function MainStack() {
+// This component handles the navigation logic
+function NavigationHandler({ children }: { children: React.ReactNode }) {
   const { user, isLoading } = useAuth()
+  const segments = useSegments()
+  const router = useRouter()
 
-  // Show loading spinner while checking auth state
+  useEffect(() => {
+    if (isLoading) return
+
+    const inAuthGroup = segments[0] === "(auth)"
+
+    if (!user && !inAuthGroup) {
+      // Redirect to login if not authenticated
+      router.replace("/(auth)/login")
+    } else if (user && inAuthGroup) {
+      // Redirect to main app if authenticated
+      router.replace("/(tabs)")
+    }
+  }, [user, segments, isLoading])
+
   if (isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -22,52 +42,38 @@ function MainStack() {
     )
   }
 
+  return <>{children}</>
+}
+
+function RootLayoutNav() {
   return (
-    <Stack>
-      {!user ? (
-        <Stack.Screen 
-          name="(auth)" 
-          options={{ 
-            headerShown: false,
-            animation: 'none'
-          }} 
-        />
-      ) : (
-        <Stack.Screen 
-          name="(tabs)" 
-          options={{ 
-            headerShown: false,
-            animation: 'none'
-          }} 
-        />
-      )}
-      <Stack.Screen 
-        name="+not-found" 
-        options={{ 
-          title: 'Not Found',
-          animation: 'none'
-        }} 
-      />
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="+not-found" />
     </Stack>
   )
 }
 
 export default function RootLayout() {
+  const colorScheme = useColorScheme()
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   })
 
-  // Show nothing while fonts are loading
   if (!loaded) {
     return null
   }
 
   return (
     <AuthProvider>
-      <ThemeProvider value={DefaultTheme}>
-        <MainStack />
-        <StatusBar style="light" />
+      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+        <NavigationHandler>
+          <RootLayoutNav />
+        </NavigationHandler>
+        <StatusBar style="auto" />
       </ThemeProvider>
     </AuthProvider>
   )
 }
+
