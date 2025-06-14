@@ -1,13 +1,13 @@
 "use client"
 
-import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native"
+import { DefaultTheme, ThemeProvider } from "@react-navigation/native"
 import { useFonts } from "expo-font"
 import { Stack } from "expo-router"
 import { StatusBar } from "expo-status-bar"
-import { View, ActivityIndicator } from "react-native"
+import React from "react"
+import { ActivityIndicator, View } from "react-native"
 import "react-native-reanimated"
 
-import { useColorScheme } from "@/hooks/useColorScheme"
 import { AuthProvider, useAuth } from "../context/AuthContext"
 
 function MainStack() {
@@ -23,23 +23,36 @@ function MainStack() {
   }
 
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      {user ? (
-        <>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        </>
+    <Stack>
+      {!user ? (
+        <Stack.Screen 
+          name="(auth)" 
+          options={{ 
+            headerShown: false,
+            animation: 'none'
+          }} 
+        />
       ) : (
-        <>
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-        </>
+        <Stack.Screen 
+          name="(tabs)" 
+          options={{ 
+            headerShown: false,
+            animation: 'none'
+          }} 
+        />
       )}
-      <Stack.Screen name="+not-found" />
+      <Stack.Screen 
+        name="+not-found" 
+        options={{ 
+          title: 'Not Found',
+          animation: 'none'
+        }} 
+      />
     </Stack>
   )
 }
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme()
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   })
@@ -51,9 +64,9 @@ export default function RootLayout() {
 
   return (
     <AuthProvider>
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+      <ThemeProvider value={DefaultTheme}>
         <MainStack />
-        <StatusBar style="auto" />
+        <StatusBar style="light" />
       </ThemeProvider>
     </AuthProvider>
   )

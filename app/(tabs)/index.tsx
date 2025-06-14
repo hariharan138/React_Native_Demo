@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  ScrollView, 
-  StatusBar,
-  Dimensions,
-  RefreshControl 
+import {
+    Dimensions,
+    RefreshControl,
+    ScrollView,
+    StatusBar,
+    StyleSheet,
+    Text,
+    View
 } from 'react-native';
 
 
@@ -206,7 +206,11 @@ export default function AlarmDashboard() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 16,
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
   },
   header: {
     backgroundColor: '#FFFFFF',

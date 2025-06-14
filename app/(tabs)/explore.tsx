@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Image } from 'expo-image';
-import { Platform, StyleSheet, View, Dimensions, ScrollView } from 'react-native';
-import { LineChart, PieChart, BarChart } from 'react-native-chart-kit';
+import { Dimensions, StyleSheet } from 'react-native';
+import { BarChart, LineChart, PieChart } from 'react-native-chart-kit';
 
 import { Collapsible } from '@/components/Collapsible';
 import { ExternalLink } from '@/components/ExternalLink';
@@ -439,5 +438,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginBottom: 8,
     color: '#333',
+  },
+  container: {
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 16,
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
   },
 });

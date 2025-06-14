@@ -26,18 +26,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     // Simulate checking for existing session
-    // In a real app, you'd check AsyncStorage or secure storage here
     const checkAuthState = async () => {
       try {
         // Simulate async operation
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-
-        // Check if user was previously logged in
-        // const savedUser = await AsyncStorage.getItem('user')
-        // if (savedUser) {
-        //   setUser(JSON.parse(savedUser))
-        // }
-
+        await new Promise((resolve) => setTimeout(resolve, 500))
         setIsLoading(false)
       } catch (error) {
         console.error("Error checking auth state:", error)
@@ -50,14 +42,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const login = async (userData: User) => {
     setUser(userData)
-    // In a real app, save to AsyncStorage
-    // await AsyncStorage.setItem('user', JSON.stringify(userData))
   }
 
   const logout = async () => {
     setUser(null)
-    // In a real app, remove from AsyncStorage
-    // await AsyncStorage.removeItem('user')
   }
 
   const isAuthenticated = user !== null

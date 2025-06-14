@@ -1,20 +1,17 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
+  ActivityIndicator,
+  Alert,
+  Dimensions,
+  RefreshControl,
   ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
   TextInput,
   TouchableOpacity,
-  Modal,
-  Alert,
-  RefreshControl,
-  StatusBar,
-  Dimensions,
-  ActivityIndicator,
-  Platform,
+  View
 } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const { width, height } = Dimensions.get('window');
@@ -652,15 +649,11 @@ const styles = StyleSheet.create({
   
   // Alarm Card Styles
   alarmCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    marginBottom: 12,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    overflow: 'hidden',
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 16,
+    boxShadow: '0 1px 4px rgba(0, 0, 0, 0.1)',
   },
   priorityBar: {
     height: 4,
