@@ -113,7 +113,7 @@ export default function AlarmDashboard() {
       <View style={styles.header}>
         <View style={styles.headerContent}>
           <Icon name="security" size={28} color="#1976D2" />
-          <Text style={styles.headerTitle}>Alarm Dashboard</Text>
+          <Text style={styles.headerTitle}>Alarms</Text>
         </View>
         <ConnectionStatus status={status} />
       </View>
