@@ -8,6 +8,11 @@ import {
     Text,
     View
 } from 'react-native';
+import * as Notifications from 'expo-notifications';
+import * as Device from 'expo-device';
+// import * as Permissions from 'expo-permissions';
+import { Platform } from 'react-native';
+import * as Haptics from 'expo-haptics';
 
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -44,18 +49,18 @@ const getPriorityLabel = (priority: number) => {
 const ConnectionStatus = ({ status }: { status: string }) => {
   const isConnected = status.includes('Connected');
   const isConnecting = status.includes('Connecting');
-  
+
   return (
-    <View style={[styles.statusContainer, { 
-      backgroundColor: isConnected ? '#E8F5E8' : isConnecting ? '#FFF3E0' : '#FFEBEE' 
+    <View style={[styles.statusContainer, {
+      backgroundColor: isConnected ? '#E8F5E8' : isConnecting ? '#FFF3E0' : '#FFEBEE'
     }]}>
-      <Icon 
-        name={isConnected ? 'wifi' : isConnecting ? 'wifi-off' : 'error'} 
-        size={20} 
-        color={isConnected ? '#2E7D32' : isConnecting ? '#F57C00' : '#D32F2F'} 
+      <Icon
+        name={isConnected ? 'wifi' : isConnecting ? 'wifi-off' : 'error'}
+        size={20}
+        color={isConnected ? '#2E7D32' : isConnecting ? '#F57C00' : '#D32F2F'}
       />
-      <Text style={[styles.statusText, { 
-        color: isConnected ? '#2E7D32' : isConnecting ? '#F57C00' : '#D32F2F' 
+      <Text style={[styles.statusText, {
+        color: isConnected ? '#2E7D32' : isConnecting ? '#F57C00' : '#D32F2F'
       }]}>
         {status}
       </Text>
@@ -77,12 +82,33 @@ export default function AlarmDashboard() {
 
     socket.onmessage = (event) => {
       const message = JSON.parse(event.data);
+    
       if (message.type === 'alarm-records') {
         const latestFive = message.records.slice(0, 5);
+        const newAlarm = latestFive[0];
+    
+        // Trigger local notification
+        if (newAlarm) {
+          sendLocalNotification(newAlarm);
+        }
+    
         setAlarms(latestFive);
       }
     };
-
+    
+    async function sendLocalNotification(alarm: AlarmRecord) {
+      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error); // Vibrate
+    
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          title: `🚨 Alarm #${alarm.id} - ${getPriorityLabel(alarm.priority)}`,
+          body: `UUID: ${alarm.uuid}\nStatus: ${alarm.isOpen ? 'OPEN' : 'CLOSED'}`,
+          sound: 'default',
+        },
+        trigger: null, // Immediately
+      });
+    }
+    
     socket.onerror = () => {
       setStatus('❌ Failed to connect to WS2');
     };

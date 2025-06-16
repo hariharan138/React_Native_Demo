@@ -70,9 +70,7 @@ export default function TabLayout() {
         }}
         listeners={{
           tabPress: (e) => {
-            // Prevent default navigation
             e.preventDefault()
-            // Show logout confirmation
             handleLogout()
           },
         }}

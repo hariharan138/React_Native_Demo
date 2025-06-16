@@ -100,11 +100,11 @@ export default function Login() {
             {/* Logo/Icon Section */}
             <View style={styles.logoContainer}>
               <View >
-              <Image
+              {/* <Image
     source={require('../../assets/logo.png')}
     style={{ width: 80, height: 80 }}
     resizeMode="contain"
-  />
+  /> */}
               </View>
               <Text style={styles.appName}>Alarm App</Text>
               <Text style={styles.tagline}>Welcome back! Please sign in to continue</Text>
